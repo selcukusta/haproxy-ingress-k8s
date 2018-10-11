@@ -1,0 +1,14 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  namespace: ingress-controller
+  name: app
+spec:
+  rules:
+  - host: foo.bar
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: basic-app-service
+          servicePort: 80

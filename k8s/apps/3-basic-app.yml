@@ -1,0 +1,43 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  namespace: ingress-controller
+  name: basic-app-deployment
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: basic-app-deployment
+    spec:
+      containers:
+        - name: basic-dotnetcore-service
+          image: 'docker.io/selcukusta/basic-dotnetcore-service:latest'
+          ports:
+            - containerPort: 80
+          env:
+            - name: SERVICE_NAME
+              value: "service-sample-1"
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: ingress-controller
+  name: basic-app-service
+  labels:
+    name: basic-app-service
+spec:
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+  selector:
+    app: basic-app-deployment
+  type: ClusterIP
